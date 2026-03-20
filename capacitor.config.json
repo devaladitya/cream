@@ -1,0 +1,14 @@
+{
+  "appId": "app.knobly.cream",
+  "appName": "Cream",
+  "webDir": "dist",
+  "server": {
+    "url": "https://knoblycream.com/",
+    "cleartext": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": false
+    }
+  }
+}
