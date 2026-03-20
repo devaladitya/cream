@@ -8,9 +8,9 @@ workflows:
       xcode: latest
       ios_signing:
         provisioning_profiles:
-          - Cream_AppStore
+          - BrainathonHub_AppStore
         certificates:
-          - Cream Distribution
+          - BrainathonHub Distribution
       vars:
         XCODE_SCHEME: "App"
     scripts:
