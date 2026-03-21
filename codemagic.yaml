@@ -23,16 +23,29 @@ workflows:
       - name: Sync Capacitor iOS
         script: |
           npx cap sync ios
+      - name: Debug - List installed profiles and certs
+        script: |
+          echo "=== Installed provisioning profiles ==="
+          ls ~/Library/MobileDevice/Provisioning\ Profiles/ 2>/dev/null || echo "No profiles directory found"
+          echo ""
+          echo "=== Keychain certificates ==="
+          security find-identity -v -p codesigning 2>/dev/null || echo "No signing identities found"
+          echo ""
+          echo "=== CM environment variables for signing ==="
+          env | grep -i -E '(CM_|FCI_|PROVISIONING|CERTIFICATE|CODE_SIGN)' 2>/dev/null || echo "No signing env vars found"
       - name: Set up code signing
         script: |
-          xcode-project use-profiles --project ios/App/App.xcodeproj
+          xcode-project use-profiles --project ios/App/App.xcodeproj --verbose
+      - name: Debug - Verify project signing after use-profiles
+        script: |
+          cd ios/App
+          xcodebuild -project App.xcodeproj -scheme App -showBuildSettings | grep -E '(CODE_SIGN|PROVISIONING|DEVELOPMENT_TEAM)'
       - name: Build iOS app
         script: |
           cd ios/App
           xcode-project build-ipa \
             --project App.xcodeproj \
-            --scheme "$XCODE_SCHEME" \
-            --archive-flags="CODE_SIGN_STYLE=Manual"
+            --scheme "$XCODE_SCHEME"
     artifacts:
       - ios/App/build/ios/ipa/*.ipa
       - build/ios/ipa/*.ipa
