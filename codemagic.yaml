@@ -25,13 +25,14 @@ workflows:
           npx cap sync ios
       - name: Set up code signing
         script: |
-          xcode-project use-profiles
+          xcode-project use-profiles --project ios/App/App.xcodeproj
       - name: Build iOS app
         script: |
           cd ios/App
           xcode-project build-ipa \
             --project App.xcodeproj \
-            --scheme "$XCODE_SCHEME"
+            --scheme "$XCODE_SCHEME" \
+            --archive-flags="CODE_SIGN_STYLE=Manual"
     artifacts:
       - ios/App/build/ios/ipa/*.ipa
       - build/ios/ipa/*.ipa
